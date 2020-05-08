@@ -1,6 +1,6 @@
 
 //Tell the library which element to use for the table
-cards.init({table:'#card-table', type:STANDARD});
+cards.init({table:'#card-table', type:EUCHRE});
 
 //Create a new deck of cards
 deck = new cards.Deck();
@@ -12,20 +12,23 @@ deck.addCards(cards.all);
 //No animation here, just get the deck onto the table.
 deck.render({immediate:true});
 
-//Now lets create a couple of hands, one face down, one face up.
-upperhand = new cards.Hand({faceUp:false, y:60});
-lowerhand = new cards.Hand({faceUp:true,  y:340});
-
 //Lets add a discard pile
 discardPile = new cards.Deck({faceUp:true});
 discardPile.x += 50;
+
+//Now lets create a couple of hands, one face down, one face up.
+handNorth = new cards.Hand({faceUp:false, y:60});
+handSouth = new cards.Hand({faceUp:true,  y:340});
+handWest = new cards.Hand({faceUp:false, x:100});
+handEast = new cards.Hand({faceUp:false,  x:500});
+
 
 
 //Let's deal when the Deal button is pressed:
 $('#deal').click(function() {
 	//Deck has a built in method to deal to hands.
 	$('#deal').hide();
-	deck.deal(5, [upperhand, lowerhand], 50, function() {
+	deck.deal(5, [handNorth, handSouth, handWest, handEast], 50, function() {
 		//This is a callback function, called when the dealing
 		//is done.
 		discardPile.addCard(deck.topCard());
@@ -38,20 +41,20 @@ $('#deal').click(function() {
 //to your hand
 deck.click(function(card){
 	if (card === deck.topCard()) {
-		lowerhand.addCard(deck.topCard());
-		lowerhand.render();
+		handSouth.addCard(deck.topCard());
+		handSouth.render();
 	}
 });
 
 //Finally, when you click a card in your hand, if it's
 //the same suit or rank as the top card of the discard pile
 //then it's added to it
-lowerhand.click(function(card){
+handSouth.click(function(card){
 	if (card.suit == discardPile.topCard().suit
 		|| card.rank == discardPile.topCard().rank) {
 		discardPile.addCard(card);
 		discardPile.render();
-		lowerhand.render();
+		handSouth.render();
 	}
 });
 
