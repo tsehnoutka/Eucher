@@ -6,7 +6,7 @@ body {
 	position:relative;
 	border-radius:8px;
 	box-shadow:black 0px 0px 2px;
-	width: 1200px;
+	width: 1300px;
 	background:#FFF;  /* white */
 	margin:20px auto;
 	border:solid 1px black;
@@ -40,8 +40,8 @@ h1 {
 
 #card-table {
 	background-color:green;
-	height:400px;
-	width:600px;
+	height:600px;
+	width:800px;
 	border:solid 6px brown;
 	border-radius:8px;
 	-webkit-border-radius:8px;
@@ -54,8 +54,8 @@ a:visited {color:blue;}
 
 #deal {
 	position: absolute;
-	left:310px;
-	top:170px;
+	left:400px;
+	top:280px;
 }
 
 footer {
@@ -70,4 +70,51 @@ footer a, footer a:visited{
 
 footer a:hover {
 	color:black;
+}
+
+
+.north {
+  position: absolute;
+  left: 350px;
+  top: 10px;
+}
+.west {
+  position: absolute;
+  left: 50px;
+  top: 200px;
+}
+.east {
+  position: absolute;
+  left: 650px;
+  top: 200px;
+}
+.south {
+  position: absolute;
+  left: 350px;
+  top: 400px;
+}
+/*  Network stuff */
+.content {
+  padding: 5px;
+  background: #ddd;
+  border-radius: 5px;
+  overflow-y: scroll;
+  border: 1px solid #CCC;
+  margin-top: 10px;
+  height: 80px;
+}
+
+.player1 {
+  color: #FF0000;
+}
+.player2 {
+  color: blue;
+}
+.player3 {
+  color: Lime;
+  background-color: black;
+}
+.player4 {
+  color: Yellow;
+  background-color: black;
 }
