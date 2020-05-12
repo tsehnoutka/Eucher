@@ -72,24 +72,25 @@ footer a:hover {
 	color:black;
 }
 
-
+.nameLabel{
+	position: absolute;
+	width: 100px;
+	font-weight: bold;
+	background: Lime;
+}
 .north {
-  position: absolute;
   left: 350px;
   top: 10px;
 }
 .west {
-  position: absolute;
   left: 50px;
   top: 200px;
 }
 .east {
-  position: absolute;
   left: 650px;
   top: 200px;
 }
 .south {
-  position: absolute;
   left: 350px;
   top: 400px;
 }

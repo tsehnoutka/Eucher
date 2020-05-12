@@ -4,7 +4,8 @@
 <head>
 	<title>Euchre</title>
 	<meta charset="UTF-8">
-	<link rel="stylesheet" href="example.css" />
+	<link rel="stylesheet" href="style.css" />
+	<link rel="icon" type="image/png" href="img/favicon.ico">
 	<script src="jquery-1.7.min.js"></script>
 </head>
 
@@ -12,7 +13,8 @@
 	<h1>Euchre</h1>
 	<table>
 		<td>Messages:
-			<table><!-- Network stuff -->
+			<table>
+				<!-- Network stuff -->
 				<tr>
 					<div id="content" class="content" style="width: 458px; height: 136px;"></div>
 				</tr>
@@ -55,17 +57,18 @@
 		<td>&nbsp;&nbsp;&nbsp;
 		</td>
 
-		<td>  <!-- Card table -->
+		<td>
+			<!-- Card table -->
 			<img class="preload" src="img/cards.png" />
 			<div id="card-table">
-				<p><strong>Dealer: </strong><input type="text" style="background:green; width:45px"  id="dealer" value="South" readonly></p>
-				<p><strong>Trump Suit: </strong><input type="text" style="background:green; width:65px"  id="suit" value="Diamonds" readonly></p>
+				<p><strong>Dealer: </strong><input type="text" style="background:green; width:45px" id="dealer" value="South" readonly></p>
+				<p><strong>Trump Suit: </strong><input type="text" style="background:green; width:65px" id="suit" value="Diamonds" readonly></p>
 				<button id="test">Test</button>
-				<p class="north" id="northName"><strong>North</strong><p>
-				<p class="west" id="westName"><strong>West</strong><p>
-				<button id="deal">DEAL</button>
-				<p class="east" id="eastName"><strong>East</strong><p>
-				<p class="south" id="southName"><strong>South</strong><p>
+				<input class="north nameLabel" id="northName" value="North" ></input>
+						<input class="west nameLabel" id="westName" value="West" ><strong>West</strong></input>
+								<button id="deal">DEAL</button>
+								<input class="east nameLabel" id="eastName" value="East" ><strong>East</strong></input>
+										<input class="south nameLabel" id="southName" value="South" ></input>
 			</div>
 
 		</td>
@@ -76,9 +79,13 @@
 		in the public domain.
 	</footer>
 	<!-- load this at the bottom so the #card-table element exists -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="node_modules/socket.io-client/dist/socket.io.js"></script>
 	<script src="deckType.js"></script>
 	<script src="cards.js"></script>
-	<script src="example.js"></script>
+	<script src="config.js"></script>
+	<script src="client.js"></script>
+	<script src="game.js"></script>
 </body>
 
 </html>
