@@ -67,10 +67,10 @@ discardPile = new cards.Deck({faceUp: true});
 discardPile.x -= 40;
 
 //Now lets create a couple of hands, one face down, one face up.
-player0Hand = new cards.Hand({faceUp: true,  y: 500});
-player1Hand = new cards.Hand({faceUp: false, x: 100});
-player2Hand = new cards.Hand({faceUp: false, y: 100});
-player3Hand = new cards.Hand({faceUp: false, x: 700});
+player0Hand = new cards.Hand({faceUp: true, y: 500}); //  South
+player1Hand = new cards.Hand({faceUp: true, x: 100}); //  West
+player2Hand = new cards.Hand({faceUp: true, y: 100}); //  North
+player3Hand = new cards.Hand({faceUp: true, x: 700}); //  East
 
 //Let's deal when the Deal button is pressed:
 $('#deal').click(function() {
@@ -79,16 +79,26 @@ $('#deal').click(function() {
   deck.deal(5, [player0Hand, player1Hand, player2Hand, player3Hand], 50, function() {
     //This is a callback function, called when the dealing
     //is done.
-    discardPile.addCard(deck.topCard());
+		//  send the other hands to the other players
+		let myHand = new Array();
+		for(let i=0; i<5; i++)
+			myHand[i] = player1Hand[i]
+		sendplayerThierCards(1,myHand);
+		for(let i=0; i<5; i++)
+			myHand[i] = player2Hand[i]
+		sendplayerThierCards(2,myHand);
+		for(let i=0; i<5; i++)
+			myHand[i] = player3Hand[i]
+		sendplayerThierCards(3,myHand);
+		discardPile.addCard(deck.topCard());
     discardPile.render();
-    console.log("dealer is: " + DEALER.value);
-  });
-  //  send the other hands to the other players
 
-	sendplayerThierCards(0,player0Hand);
-	sendplayerThierCards(1,player1Hand);
-	sendplayerThierCards(2,player2Hand);
-	sendplayerThierCards(3,player3Hand);
+		//  send top card of discard pile
+		//  deck.topCard()
+
+		console.log("dealer is: " + DEALER.value);
+  });
+
 
 	//  determine who deals first
 
@@ -122,6 +132,21 @@ function flipDiscardOver() {
   discardPile.x -= 10;
   discardPile.render();
 }
+
+function setHand(myN_Cards){
+	console.log("setting my Hand")
+	deck.deal(5, [player0Hand, player1Hand, player2Hand, player3Hand], 50, function() {
+    //This is a callback function, called when the dealing
+    //is done.
+		//  send the other hands to the other players
+		for(let i=0; i<5; i++)
+			player0Hand[i] = myN_Cards[i];
+		discardPile.addCard(deck.topCard());
+    discardPile.render();
+    console.log("dealer is: " + DEALER.value);
+  });
+
+}
 /*
 //When you click on the top card of a deck, a card is added
 //to your hand
@@ -148,7 +173,6 @@ player0Hand.click(function(card) {
   } //  end if
   discardPile.addCard(card);
   discardPile.render();
-  handSouth.render();
 }); //  end function
 
 

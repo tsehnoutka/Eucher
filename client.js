@@ -308,12 +308,13 @@ function sendAllPlayersJoined(){
   });
 }
 
-//  ***************     Send Players ther cards     ***************
-function sendplayerThierCards(playerNum, cards){
-  console.log("sending player's their cards");
+//  ***************     Send Players their cards     ***************
+function sendplayerThierCards(myplayerNum, myN_Cards){
+  console.log("sending player: "+ myplayerNum + " their cards: " + myN_Cards);
   socket.emit('playersCards', {
-    playerNum: playerNum,
-    cards:cards
+    playerNum: myplayerNum,
+    myCards: myN_Cards,
+    room: code
   });
 }
 
@@ -416,6 +417,10 @@ socket.on('allPlayers', function(data) {
   }
 }); //  end recieved all players
 
+//  ***************     Recieve Cards     ***************
+socket.on('cards', function(data) {
+  setHand(data.cards);
+});
 //  ***************     Recieved Load     ***************
 socket.on('load', function(data) {
   console.log("on lLoad");
