@@ -4,7 +4,7 @@ const SOUTH_NAME = document.getElementById('southName');
 const WEST_NAME = document.getElementById('westName');
 const NORTH_NAME = document.getElementById('northName');
 const EAST_NAME = document.getElementById('eastName');
-const NAMES = [SOUTH_NAME,WEST_NAME,NORTH_NAME,EAST_NAME]
+const NAMES = [SOUTH_NAME, WEST_NAME, NORTH_NAME, EAST_NAME]
 const suitConvertor = new Map();
 suitConvertor.set("Hearts", "h");
 suitConvertor.set("Clubs", "c");
@@ -25,33 +25,36 @@ const GAME_TYPE = GT_EUCHRE;
 
 var playedSuit = "Hearts";
 var myPlayerNumber = -1;
-var turn=0;
-var numOfPlayers=0;
+var turn = 0;
+var numOfPlayers = 0;
 
 
 var playerInfo = [{
     name: "Red",
     color: "red",
-		background: "Coral"
+    background: "Coral"
   },
   {
     name: "Blue",
     color: "blue",
-		background: "LightSkyBlue"
+    background: "LightSkyBlue"
   },
   {
     name: "Green",
     color: "green",
-		background: "Lime"
+    background: "Lime"
   },
   {
     name: "Yellow",
     color: "yellow",
-		background: "#fcfce8"
+    background: "#fcfce8"
   },
 ];
 //Tell the library which element to use for the table
-cards.init({table: '#card-table',type: EUCHRE});
+cards.init({
+  table: '#card-table',
+  type: EUCHRE
+});
 
 //Create a new deck of cards
 deck = new cards.Deck();
@@ -60,66 +63,88 @@ deck.x -= 50;
 //cards.all contains all cards, put them all in the deck
 deck.addCards(cards.all);
 //No animation here, just get the deck onto the table.
-deck.render({immediate: true});
+deck.render({
+  immediate: true
+});
 
 //Lets add a discard pile
-discardPile = new cards.Deck({faceUp: true});
+discardPile = new cards.Deck({
+  faceUp: true
+});
 discardPile.x -= 40;
 
 //Now lets create a couple of hands, one face down, one face up.
-player0Hand = new cards.Hand({faceUp: true, y: 500}); //  South
-player1Hand = new cards.Hand({faceUp: true, x: 100}); //  West
-player2Hand = new cards.Hand({faceUp: true, y: 100}); //  North
-player3Hand = new cards.Hand({faceUp: true, x: 700}); //  East
+player0Hand = new cards.Hand({
+  faceUp: true,
+  y: 500
+}); //  South
+player1Hand = new cards.Hand({
+  faceUp: true,
+  x: 100
+}); //  West
+player2Hand = new cards.Hand({
+  faceUp: true,
+  y: 100
+}); //  North
+player3Hand = new cards.Hand({
+  faceUp: true,
+  x: 700
+}); //  East
 
 //Let's deal when the Deal button is pressed:
 $('#deal').click(function() {
   //Deck has a built in method to deal to hands.
   $('#deal').hide();
-  deck.deal(5, [player0Hand, player1Hand, player2Hand, player3Hand], 50, function() {
+  deck.deal(5, [player0Hand, player1Hand, player2Hand, player3Hand], 40, function() {
     //This is a callback function, called when the dealing
     //is done.
-		//  send the other hands to the other players
-		let myHand = new Array();
-		for(let i=0; i<5; i++)
-			myHand[i] = player1Hand[i]
-		sendplayerThierCards(1,myHand);
-		for(let i=0; i<5; i++)
-			myHand[i] = player2Hand[i]
-		sendplayerThierCards(2,myHand);
-		for(let i=0; i<5; i++)
-			myHand[i] = player3Hand[i]
-		sendplayerThierCards(3,myHand);
-		discardPile.addCard(deck.topCard());
+    //  send the other hands to the other players
+    let i=0;
+    let theTopCard={suit:deck.topCard().suit, rank:deck.topCard().rank};
+    let myHand = new Array();
+    for ( i = 0; i < 5; i++)
+      myHand[i] = {suit: player1Hand[i].suit, rank: player1Hand[i].rank};
+      myHand[i]=theTopCard;
+    sendplayerThierCards(1, myHand);
+    for ( i = 0; i < 5; i++)
+      myHand[i] = {suit: player2Hand[i].suit, rank: player2Hand[i].rank};
+      myHand[i]=theTopCard;
+    sendplayerThierCards(2, myHand);
+    for ( i = 0; i < 5; i++)
+      myHand[i] = {suit: player3Hand[i].suit, rank: player3Hand[i].rank};
+      myHand[i]=theTopCard;
+    sendplayerThierCards(3, myHand);
+
+    discardPile.addCard(deck.topCard());
     discardPile.render();
 
-		//  send top card of discard pile
-		//  deck.topCard()
+    //  send top card of discard pile
+    //  deck.topCard()
 
-		console.log("dealer is: " + DEALER.value);
+    console.log("dealer is: " + DEALER.value);
   });
 
 
-	//  determine who deals first
+  //  determine who deals first
 
   //  figure out the trump suit
-	gameOn = true;
+  gameOn = true;
 });
 
-function gameOn(){
-	console.log("game ON!");
-	SOUTH_NAME.value=playerInfo[0].name;
-	WEST_NAME.value =playerInfo[1].name;
-	NORTH_NAME.value=playerInfo[2].name;
-	EAST_NAME.value =playerInfo[3].name;
-	SOUTH_NAME.backgroundColor=playerInfo[0].background;
-	WEST_NAME.backgroundColor =playerInfo[1].background;
-	NORTH_NAME.backgroundColor=playerInfo[2].background;
-	EAST_NAME.backgroundColor =playerInfo[3].background;
-	sendAllPlayersJoined();
+function gameOn() {
+  console.log("game ON!");
+  SOUTH_NAME.value = playerInfo[0].name;
+  WEST_NAME.value = playerInfo[1].name;
+  NORTH_NAME.value = playerInfo[2].name;
+  EAST_NAME.value = playerInfo[3].name;
+  SOUTH_NAME.backgroundColor = playerInfo[0].background;
+  WEST_NAME.backgroundColor = playerInfo[1].background;
+  NORTH_NAME.backgroundColor = playerInfo[2].background;
+  EAST_NAME.backgroundColor = playerInfo[3].background;
+  sendAllPlayersJoined();
 }
 
-function determineWhoGoesFirst(){}
+function determineWhoGoesFirst() {}
 
 $('#test').click(function() {
   console.log("test button pressed");
@@ -133,15 +158,28 @@ function flipDiscardOver() {
   discardPile.render();
 }
 
-function setHand(myN_Cards){
-	console.log("setting my Hand")
-	deck.deal(5, [player0Hand, player1Hand, player2Hand, player3Hand], 50, function() {
+function setHand(myN_Cards) {
+  console.log("setting my Hand")
+  deck.deal(5, [player0Hand, player1Hand, player2Hand, player3Hand], 50, function() {
     //This is a callback function, called when the dealing
     //is done.
-		//  send the other hands to the other players
-		for(let i=0; i<5; i++)
-			player0Hand[i] = myN_Cards[i];
-		discardPile.addCard(deck.topCard());
+    //  send the other hands to the other players
+    let i = 0;
+    for (i = 0; i < 5; i++){
+      let newSuit= myN_Cards[i].suit;
+      let newRank= myN_Cards[i].rank;
+      player0Hand[i].suit = newSuit;
+      player0Hand[i].rank = newRank;
+      player0Hand[i].shortName = newSuit + newRank;
+      player0Hand[i].name = newSuit.toUpperCase() + newRank;
+      player0Hand[i].showCard();
+    }
+    let newSuit= myN_Cards[i].suit;
+    let newRank= myN_Cards[i].rank;
+    let theTopCard =deck.topCard();
+    theTopCard.suit = newSuit;
+    theTopCard.rank = newRank;
+    discardPile.addCard(theTopCard);
     discardPile.render();
     console.log("dealer is: " + DEALER.value);
   });

@@ -303,13 +303,15 @@ window.onbeforeunload = function() {
 //  ***************     Send All Players     ***************
 function sendAllPlayersJoined(){
   console.log("sending all players info");
+   sendMessage("All players have joined")
   socket.emit('allPlayersNames', {
-    players: playerInfo
+    players: playerInfo,
+    room:code
   });
 }
 
 //  ***************     Send Players their cards     ***************
-function sendplayerThierCards(myplayerNum, myN_Cards){
+function sendplayerThierCards(myplayerNum, myN_Cards,theTopCard){
   console.log("sending player: "+ myplayerNum + " their cards: " + myN_Cards);
   socket.emit('playersCards', {
     playerNum: myplayerNum,
