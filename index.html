@@ -27,26 +27,26 @@
 				</tr>
 				<tr>
 					<div>
-						<span class="player1">Player 1</span>: <input type="text" name="jname" id="p1Name" placeholder="Enter your name" size="15" required>
+						<span class="player1">Player 1</span>: <input value="Tim" type="text" name="jname" id="p1Name" placeholder="Enter your name" size="15" required>
 						<button id="new">Create</button>
 					</div>
 				</tr>
 				<tr>
 					<div>
-						<span class="player2">Player 2</span>: <input type="text" name="jname" id="p2Name" placeholder="Enter your name" size="15" required>
+						<span class="player2">Player 2</span>: <input value="Tracey" type="text" name="jname" id="p2Name" placeholder="Enter your name" size="15" required>
 						Code: <input type="text" name="room" id="i2room" placeholder="Enter code" size="6" required>
 						<button id="p2Join">Join</button>
 					</div>
 				</tr>
 				<tr>
 					<div>
-						<span class="player3">Player 3</span>: <input type="text" name="jname" id="p3Name" placeholder="Enter your name" size="15" required>
+						<span class="player3">Player 3</span>: <input value="Erin" type="text" name="jname" id="p3Name" placeholder="Enter your name" size="15" required>
 						Code: <input type="text" name="room" id="i3room" placeholder="Enter code" size="6" required>
 						<button id="p3Join">Join</button>
 					</div>
 				</tr>
 				<div>
-					<span class="player4">Player 4</span>: <input type="text" name="jname" id="p4Name" placeholder="Enter your name" size="15" required>
+					<span class="player4">Player 4</span>: <input value="Alex"type="text" name="jname" id="p4Name" placeholder="Enter your name" size="15" required>
 					Code: <input type="text" name="room" id="i4room" placeholder="Enter code" size="6" required>
 					<button id="p4Join">Join</button>
 				</div>
@@ -63,16 +63,30 @@
 			<div id="card-table">
 				<p><strong>Dealer: </strong><input type="text" style="background:green; width:45px" id="dealer" value="South" readonly></p>
 				<p><strong>Trump Suit: </strong><input type="text" style="background:green; width:65px" id="suit" value="Diamonds" readonly></p>
-				<button id="test">Test</button>
+				<button cursor="pointer" id="test">Test</button>
 				<input class="north nameLabel" id="northName" value="North"></input>
 				<input class="west nameLabel" id="westName" value="West"><strong>West</strong></input>
-				<button id="deal">DEAL</button>
+				<button id="deal" cursor="pointer" disabled>DEAL</button>
 				<input class="east nameLabel" id="eastName" value="East"><strong>East</strong></input>
 				<input class="south nameLabel" id="southName" value="South"></input>
 			</div>
 
 		</td>
 	</table>
+	<!-- Trigger/Open The Modal -->
+<!-- m<button id="myBtn">Open Modal</button>-->
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p id="modalText">Some text in the Modal..</p>
+		<button id="modalHearts">Hearts</button><button id="modalSpades">Spades</button><button id="modalDiamonds">Diamonds</button><button id="modalClubs">Clubs</button>
+  </div>
+
+</div>
 	<footer>
 		cards.js was created by <a href="http://einaregilsson.com">Einar Egilsson</a> and is licensed
 		under the MIT license. The card images were created by <a href="http://nicubunu.ro">Nicu Buculei</a> and are

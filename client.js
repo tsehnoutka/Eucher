@@ -64,9 +64,9 @@ jQuery(document).ready(function($) {
   $('#new').on('click', function() {
     console.log("New game clicked");
     name = NAME1JOIN.value.escape();
-    playerInfo[PLAYER_ONE].name=name;
-    SOUTH_NAME.value=name;
-    myPlayerNumber=0;
+    playerInfo[PLAYER_ONE].name = name;
+    SOUTH_NAME.value = name;
+    myPlayerNumber = 0;
     color = playerInfo[PLAYER_ONE].color;
     if (!name) {
       const playPromise = BONK_SOUND.play();
@@ -113,7 +113,7 @@ jQuery(document).ready(function($) {
     socket.emit('joinGame', {
       name: name,
       room: roomID,
-      playNum:myPlayerNumber,
+      playNum: myPlayerNumber,
       type: GAME_TYPE
     });
   } //  end join
@@ -122,9 +122,9 @@ jQuery(document).ready(function($) {
     console.log("Join 2 clicked");
 
     name = NAME2JOIN.value.escape();
-    playerInfo[PLAYER_TWO].name=name;
+    playerInfo[PLAYER_TWO].name = name;
     color = playerInfo[PLAYER_TWO].color;
-    myPlayerNumber=1;
+    myPlayerNumber = 1;
     let roomID = ROOM2.value.escape();
     join(name, roomID);
   }
@@ -134,9 +134,9 @@ jQuery(document).ready(function($) {
     console.log("Join 3 clicked");
 
     name = NAME3JOIN.value.escape();
-    playerInfo[PLAYER_THREE].name=name;
+    playerInfo[PLAYER_THREE].name = name;
     color = playerInfo[PLAYER_THREE].color;
-    myPlayerNumber=2;
+    myPlayerNumber = 2;
     let roomID = ROOM3.value.escape();
     join(name, roomID);
   }
@@ -146,9 +146,9 @@ jQuery(document).ready(function($) {
     console.log("Join 4 clicked");
 
     name = NAME4JOIN.value.escape();
-    playerInfo[PLAYER_FOUR].name=name;
+    playerInfo[PLAYER_FOUR].name = name;
     color = playerInfo[PLAYER_FOUR].color;
-    myPlayerNumber=3;
+    myPlayerNumber = 3;
     let roomID = ROOM4.value.escape();
     join(name, roomID);
   }
@@ -222,7 +222,7 @@ String.prototype.escape = function() {
 };
 
 //  ***************     Send message     ***************
-function sendMessage(msg){
+function sendMessage(msg) {
   socket.emit('message', {
     name: name,
     text: msg,
@@ -301,23 +301,34 @@ window.onbeforeunload = function() {
 };
 
 //  ***************     Send All Players     ***************
-function sendAllPlayersJoined(){
+function sendAllPlayersJoined() {
   console.log("sending all players info");
-   sendMessage("All players have joined")
+  sendMessage("All players have joined")
   socket.emit('allPlayersNames', {
     players: playerInfo,
-    room:code
+    room: code
   });
 }
 
 //  ***************     Send Players their cards     ***************
-function sendplayerThierCards(myplayerNum, myN_Cards,theTopCard){
-  console.log("sending player: "+ myplayerNum + " their cards: " + myN_Cards);
+function sendplayerThierCards(myplayerNum, myN_Cards, theDealer) {
+  console.log("sending player: " + myplayerNum + " their cards: " + myN_Cards);
   socket.emit('playersCards', {
     playerNum: myplayerNum,
     myCards: myN_Cards,
+    theDealer: theDealer,
     room: code
   });
+}
+
+function askPlayerToOrderUpDealtTrump(p, t) {
+  console.log("Asking player: " + p + " if they want: " + t + "as the trump suit");
+  socket.emit('dealtTrump', {
+    playerNum: p,
+    dealtTrump: t,
+    room: code
+  });
+
 }
 
 //***************************************************************
@@ -332,7 +343,7 @@ socket.on('newGame', function(data) {
   code = data.room;
   yourTurn = true;
   disableInput();
-  numOfPlayers=1;
+  numOfPlayers = 1;
 });
 
 //  ***************     Recieved Join     ***************
@@ -342,7 +353,7 @@ socket.on('joined', function(data) {
   numOfPlayers = data.nop;
   playerInfo[data.playerNumber].name = data.name;
   console.log("\tNumber of players: " + numOfPlayers);
-  if (4 == numOfPlayers && 0==myPlayerNumber){
+  if (4 == numOfPlayers && 0 == myPlayerNumber) {
     gameOn();
   }
 });
@@ -406,21 +417,22 @@ socket.on('saved', function(data) {
 //  ***************     Recieved AllPlayers     ***************
 socket.on('allPlayers', function(data) {
   console.log("On all players");
-  for(let i=0; i<MAX_PLAYERS; i++)
+  for (let i = 0; i < MAX_PLAYERS; i++)
     playerInfo[i].name = data.players[i].name;
 
-  let i=myPlayerNumber;
-  for (j=0; j< MAX_PLAYERS; j++){
+  let i = myPlayerNumber;
+  for (j = 0; j < MAX_PLAYERS; j++) {
     NAMES[j].value = playerInfo[i].name
     NAMES[j].backgroundColor = playerInfo[i].background
 
-    if (++i==MAX_PLAYERS)
-      i=0;
+    if (++i == MAX_PLAYERS)
+      i = 0;
   }
 }); //  end recieved all players
 
 //  ***************     Recieve Cards     ***************
 socket.on('cards', function(data) {
+  DEALER.value = playerInfo[data.theDealer].name;
   setHand(data.cards);
 });
 //  ***************     Recieved Load     ***************
