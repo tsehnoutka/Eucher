@@ -435,6 +435,25 @@ socket.on('cards', function(data) {
   DEALER.value = playerInfo[data.theDealer].name;
   setHand(data.cards);
 });
+
+//  ***************     Recieve asking dealt trump     ***************
+socket.on('orderDealt', function(data) {
+  let message = "Do you want to order up - " + suitConvertor.get(data.dealtTrump);
+  let response = confirm(messsage);
+  socket.emit('dealtTrumpResponse', {
+    playerNum: p,
+    dealtTrumpResponse: response,
+    room: code
+  });
+});
+
+//  ***************     Recieve asking dealt trump     ***************
+socket.on('dealtTrumpReponse', function(data) {
+  found = data.response;
+  numberOfPlayersAskedAboutTrump++;
+  player = incrementPlayer(player);
+});
+
 //  ***************     Recieved Load     ***************
 socket.on('load', function(data) {
   console.log("on lLoad");

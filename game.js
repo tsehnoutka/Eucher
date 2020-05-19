@@ -17,10 +17,10 @@ const BTN_M_DIAMONDS = document.getElementById('modalDiamonds');
 const BTN_M_CLUBS = document.getElementById('modalClubs');
 
 const suitConvertor = new Map();
-suitConvertor.set("h","Hearts" );
-suitConvertor.set("c","Clubs");
-suitConvertor.set("d","Diamonds");
-suitConvertor.set("s","Spades");
+suitConvertor.set("h", "Hearts");
+suitConvertor.set("c", "Clubs");
+suitConvertor.set("d", "Diamonds");
+suitConvertor.set("s", "Spades");
 
 const PLAYER_ONE = 0;
 const PLAYER_TWO = 1;
@@ -41,6 +41,7 @@ var numOfPlayers = 0;
 var dealtTrumpSuit;
 var trumpSuit;
 var dealer = 0;
+var numberOfPlayersAskedAboutTrump = 0;
 
 var playerInfo = [{
     name: "Red",
@@ -111,6 +112,7 @@ function deal() {
   //Deck has a built in method to deal to hands.
   BTN_DEAL.style.visibility = "hidden";
   determineWhoGoesFirst();
+  numberOfPlayersAskedAboutTrump = 0;
   deck.deal(5, [player0Hand, player1Hand, player2Hand, player3Hand], 40, function() {
     //This is a callback function, called when the dealing
     //is done.
@@ -149,18 +151,28 @@ function deal() {
     //  figure out the trump suit
     dealtTrumpSuit = theTopCard.suit;
     DLG_TRUMP.value = suitConvertor.get(dealtTrumpSuit);
+
     //  ask player left of dealer
-    /*
-    let found =false;
+    let found = false;
     let player = incrementPlayer(dealer);
-    while(!found){
-      askPlayerToOrderUpDealtTrump(player,dealtTrumpSuit);
-      player=incrementPlayer(player);
+    while (!found && numberOfPlayersAskedAboutTrump < MAX_PLAYERS) {
+      sleep(1000);
+        askPlayerToOrderUpDealtTrump(player, dealtTrumpSuit);
     }
-    */
+
   });
 
   gameOn = true;
+}
+/************************************************
+ **           sleep
+ ************************************************/
+function sleep(milliseconds) {
+  const date = Date.now();
+  let currentDate = null;
+  do {
+    currentDate = Date.now();
+  } while (currentDate - date < milliseconds);
 }
 
 function test() {
@@ -177,7 +189,7 @@ function determineWinner() {
   BTN_DEAL.show();
 }
 
-function incrementDealer(x) {
+function incrementPlayer(x) {
   x++;
   if (x == MAX_PLAYERS)
     x = 0;
