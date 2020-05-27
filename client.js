@@ -321,11 +321,12 @@ function sendplayerThierCards(myplayerNum, myN_Cards, theDealer) {
   });
 }
 
-function askPlayerToOrderUpDealtTrump(p, t) {
+function askPlayerToOrderUpTrump(p, t, k) {
   console.log("Asking player: " + p + " if they want: " + t + "as the trump suit");
   socket.emit('dealtTrump', {
     playerNum: p,
     dealtTrump: t,
+    type: k,
     room: code
   });
 
@@ -432,43 +433,44 @@ socket.on('allPlayers', function(data) {
 
 //  ***************     Recieve Cards     ***************
 socket.on('cards', function(data) {
-  DEALER.value = playerInfo[data.theDealer].name;
+  dealer= data.theDealer;
+  DEALER.value = playerInfo[dealer].name;
   setHand(data.cards);
 });
 
 //  ***************     Recieve asking dealt trump     ***************
 socket.on('orderDealt', function(data) {
-  BTN_MD_TRUMP.innerHTML = suitConvertor.get(dealtTrumpSuit);
-  MODALDEALT_TXT.innerHTML = "Should the dealer pick it up?"
-  MODALDEALT.style.display = "block";
+  askingPlayer = data.playerNum;
+  if (data.type == DEALT) {
+    BTN_MD_TRUMP.innerHTML = suitConvertor.get(data.dealtTrump);
+    MODALDEALT_TXT.innerHTML = "Should the dealer pick it up?"
+    MODALDEALT.style.display = "block";
+  }
+  if (data.type == ORDER) {
+    switch (data.dealtTrump) {
+  case "h":
+    BTN_MO_HEARTS.disabled = true;
+    break;
+  case "c":
+    BTN_MO_CLUBS.disabled = true;
+    break;
+  case "d":
+    BTN_MO_DIAMONDS.disabled = true;
+    break;
+  case "s":
+    BTN_MO_SPADES.disabled = true;
+    break;
+}
+MODALORDER_TXT.innerHTML = "What suit would you like as trump suit?"
+MODALORDER.style.display = "block";
 
-  socket.emit('dealtTrumpResponse', {
-    playerNum: myPlayerNumber,
-    dealtTrumpResponse: playerResponse,
-    goAlone: goAlone,
-    room: code
-  });
+  }
 });
 
 //  ***************     Recieve asking dealt trump     ***************
 socket.on('dealtTrumpReponse', function(data) {
   found = data.response;
-  if (found) {
-    //  we have our suit, and we know if player is going alone
-    trumpSuit = dealtTrumpSuit;
-    goAlone = data.playerGoingAlone;
-    //  need to tell everyone
-  } else {
-    numOfAsks++;
-    if (numOfAsks > MAX_PLAYERS) {
-      // ask around order up Trump
-    }
-    //  ask next player if dealt suit is good
-    if (myPlayerNumber == dealer) { // if I am the dealer, ask next playerResponse
-      player = incrementPlayer(player);
-      askPlayerToOrderUpDealtTrump(player, dealtTrumpSuit);
-    }
-  }
+
 });
 
 //  ***************     Recieved Load     ***************

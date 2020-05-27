@@ -94,7 +94,7 @@ function checkCodeExist(room) {
 io.on('connection', function (socket) {
   let dt = new Date(new Date().getTime());
   dtFormatted = (dt.getMonth() + 1 + "/" + dt.getDate() + " " + (dt.getHours() < 10 ? '0' + dt.getHours() : dt.getHours()) + ':' + (dt.getMinutes() < 10 ? '0' + dt.getMinutes() : dt.getMinutes()));
-  console.log(dtFormatted + " - on Connection");
+  console.log(dtFormatted + " - on Connection; Socket: "+ socket.id);
   socket.emit('err', {
     text: 'Connected to server',
     time: new Date().getTime()
@@ -293,7 +293,7 @@ io.on('connection', function (socket) {
       playerInfo = aPlayerInfo[i++];
       if (data.playerNum == playerInfo.playerNum) {
         console.log("sending cards to player: " + data.playerNum)
-        io.to(playerInfo.Socket).emit('orderDealt', { dealtTrump:data.dealtTrump });
+        io.to(playerInfo.Socket).emit('orderDealt', { playerNum:data.playerNum, dealtTrump:data.dealtTrump, type:data.type});
         done = true;
       }
     }
