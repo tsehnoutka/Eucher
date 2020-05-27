@@ -8,13 +8,18 @@ const NAMES = [SOUTH_NAME, WEST_NAME, NORTH_NAME, EAST_NAME]
 const BTN_DEAL = document.getElementById('deal');
 const DLG_TRUMP = document.getElementById('suit');
 const BTN_TEST = document.getElementById('test');
-const MODAL = document.getElementById("myModal"); // Get the modal
-const MODAL_TXT = document.getElementById("modalText");
+const MODALORDER = document.getElementById("orderTrump"); // Get the modal
+const MODALORDER_TXT = document.getElementById("modalOrderText");
+const MODALDEALT = document.getElementById("dealtTrump"); // Get the modal
+const MODALDEALT_TXT = document.getElementById("modalDealtText");
 const SPAN = document.getElementsByClassName("close")[0]; // Get the <span> element that closes the modal
-const BTN_M_HEARTS = document.getElementById('modalHearts');
-const BTN_M_SPADES = document.getElementById('modalSpades');
-const BTN_M_DIAMONDS = document.getElementById('modalDiamonds');
-const BTN_M_CLUBS = document.getElementById('modalClubs');
+const BTN_MO_HEARTS = document.getElementById('modalOrderHearts');
+const BTN_MO_SPADES = document.getElementById('modalOrderSpades');
+const BTN_MO_DIAMONDS = document.getElementById('modalOrderDiamonds');
+const BTN_MO_CLUBS = document.getElementById('modalOrderClubs');
+const BTN_MO_PASS = document.getElementById('modalOrderPass');
+const BTN_MD_PASS = document.getElementById('modalDealtPass');
+const BTN_MD_TRUMP = document.getElementById('modalDealtTrump');
 
 const suitConvertor = new Map();
 suitConvertor.set("h", "Hearts");
@@ -38,10 +43,13 @@ var playedSuit = "h";
 var myPlayerNumber = -1;
 var turn = 0;
 var numOfPlayers = 0;
-var dealtTrumpSuit;
+var dealtTrumpSuit = "h";
 var trumpSuit;
 var dealer = 0;
 var numberOfPlayersAskedAboutTrump = 0;
+var numOfAsks = 0;
+var goAlone=false;
+var playerResponse=false;
 
 var playerInfo = [{
     name: "Red",
@@ -130,6 +138,7 @@ function deal() {
       };
     myHand[i] = theTopCard;
     sendplayerThierCards(1, myHand, dealer);
+    myHand = [];
     for (i = 0; i < 5; i++)
       myHand[i] = {
         suit: player2Hand[i].suit,
@@ -137,6 +146,7 @@ function deal() {
       };
     myHand[i] = theTopCard;
     sendplayerThierCards(2, myHand, dealer);
+    myHand = [];
     for (i = 0; i < 5; i++)
       myHand[i] = {
         suit: player3Hand[i].suit,
@@ -147,39 +157,47 @@ function deal() {
 
     discardPile.addCard(deck.topCard());
     discardPile.render();
-
+/*
     //  figure out the trump suit
     dealtTrumpSuit = theTopCard.suit;
     DLG_TRUMP.value = suitConvertor.get(dealtTrumpSuit);
 
     //  ask player left of dealer
-    let found = false;
     let player = incrementPlayer(dealer);
-    while (!found && numberOfPlayersAskedAboutTrump < MAX_PLAYERS) {
-      sleep(1000);
-        askPlayerToOrderUpDealtTrump(player, dealtTrumpSuit);
-    }
+    askPlayerToOrderUpDealtTrump(player, dealtTrumpSuit);
 
+*/
   });
 
   gameOn = true;
 }
-/************************************************
- **           sleep
- ************************************************/
-function sleep(milliseconds) {
-  const date = Date.now();
-  let currentDate = null;
-  do {
-    currentDate = Date.now();
-  } while (currentDate - date < milliseconds);
-}
+
 
 function test() {
   console.log("test button pressed");
   //determineWinner();
-  MODAL_TXT.innerHTML = " Do you want this suit as trump?  Should the dealer pick it up?"
-  MODAL.style.display = "block";
+  /*
+  BTN_MD_TRUMP.innerHTML = suitConvertor.get(dealtTrumpSuit);
+  MODALDEALT_TXT.innerHTML = "Should the dealer pick it up?"
+  MODALDEALT.style.display = "block";
+*/
+  switch (dealtTrumpSuit) {
+    case "h":
+      BTN_MO_HEARTS.disabled = true;
+      break;
+    case "c":
+      BTN_MO_CLUBS.disabled = true;
+      break;
+    case "d":
+      BTN_MO_DIAMONDS.disabled = true;
+      break;
+    case "s":
+      BTN_MO_SPADES.disabled = true;
+      break;
+  }
+  MODALORDER_TXT.innerHTML = "What suit would you like as trump suit?"
+  MODALORDER.style.display = "block";
+
   //deck.topCard().rotate(90);
 } //  end test function
 
@@ -282,52 +300,65 @@ player0Hand.click(function(card) {
 }); //  end function
 
 
-//So, that should give you some idea about how to render a card game.
-//Now you just need to write some logic around who can play when etc...
-//Good luck :)
 
-
-/*
-//  Modal stuff// When the user clicks the button, open the modal
-btn.onclick = function() {
-  modal.style.display = "block";
-}
-*/
-
-// When the user clicks on <span> (x), close the modal
-SPAN.onclick = function() {
-  MODAL.style.display = "none";
-}
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
   console.log("Window clicked");
-  if (event.target == MODAL) {
-    MODAL.style.display = "none";
+  if (event.target == MODALORDER) {
+    console.log("\tOrder up trump modal");
+    MODALORDER.style.display = "none";
   }
-  if (event.target == BTN_M_HEARTS) {
+  if (event.target == BTN_MO_HEARTS) {
+    console.log("\tHearts selected");
     trumpSuit = "Hearts";
-    MODAL.style.display = "none";
+    goAlone= document.getElementById("orderCheckbox").checked;
+    MODALORDER.style.display = "none";
   }
-  if (event.target == BTN_M_SPADES) {
+  if (event.target == BTN_MO_SPADES) {
+    console.log("\tSpades selected");
     trumpSuit = "Spades";
-    MODAL.style.display = "none";
+    goAlone= document.getElementById("orderCheckbox").checked;
+    MODALORDER.style.display = "none";
   }
-  if (event.target == BTN_M_DIAMONDS) {
+  if (event.target == BTN_MO_DIAMONDS) {
+    console.log("\tDiamonds selected");
     trumpSuit = "Diamonds";
-    MODAL.style.display = "none";
+    goAlone= document.getElementById("orderCheckbox").checked;
+    MODALORDER.style.display = "none";
   }
-  if (event.target == BTN_M_CLUBS) {
+  if (event.target == BTN_MO_CLUBS) {
+    console.log("\tClubs selected");
     trumpSuit = "Clubs";
-    MODAL.style.display = "none";
+    goAlone= document.getElementById("modalOrderTrump").checked;
+    MODALORDER.style.display = "none";
+  }
+  if (event.target == BTN_MD_TRUMP) {
+    console.log("\tDealt suit selected");
+    trumpSuit = dealtTrumpSuit;
+    playerResponse=true;
+    goAlone= document.getElementById("modalDealtGoAlone").checked;
+    MODALDEALT.style.display = "none";
+  }
+  if (event.target == BTN_MD_PASS) {
+    console.log("\tDealt Modal Pass selected");
+    playerResponse=false;
+    MODALDEALT.style.display = "none";
+  }
+  if (event.target == BTN_MO_PASS) {
+    console.log("\Order Modal Pass selected");
+    MODALORDER.style.display = "none";
   }
   if (event.target == BTN_DEAL) {
+    console.log("\tDeal");
     deal();
   }
   if (event.target == BTN_TEST) {
+    console.log("\ttest");
     test();
   }
   if (event.target == player0Hand) {
+    console.log("\tPlay Card");
     playCard();
   }
   console.log("the Trump suit is: " + trumpSuit);

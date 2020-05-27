@@ -46,7 +46,7 @@
 					</div>
 				</tr>
 				<div>
-					<span class="player4">Player 4</span>: <input value="Alex"type="text" name="jname" id="p4Name" placeholder="Enter your name" size="15" required>
+					<span class="player4">Player 4</span>: <input value="Alex" type="text" name="jname" id="p4Name" placeholder="Enter your name" size="15" required>
 					Code: <input type="text" name="room" id="i4room" placeholder="Enter code" size="6" required>
 					<button id="p4Join">Join</button>
 				</div>
@@ -65,30 +65,39 @@
 				<p><strong>Trump Suit: </strong><input type="text" style="background:green; width:65px" id="suit" value="Diamonds" readonly></p>
 				<button cursor="pointer" id="test">Test</button>
 				<input class="north nameLabel" id="northName" value="North"></input>
-				<input class="west nameLabel" id="westName" value="West"><strong>West</strong></input>
+				<input class="west nameLabel" id="westName" value="West"></input>
 				<button id="deal" cursor="pointer" disabled>DEAL</button>
-				<input class="east nameLabel" id="eastName" value="East"><strong>East</strong></input>
+				<input class="east nameLabel" id="eastName" value="East"></input>
 				<input class="south nameLabel" id="southName" value="South"></input>
 			</div>
 
 		</td>
 	</table>
 	<!-- Trigger/Open The Modal -->
-<!-- m<button id="myBtn">Open Modal</button>-->
+	<!-- m<button id="myBtn">Open Modal</button>-->
 
-<!-- The Modal -->
-<div id="myModal" class="modal">
+	<!-- The Modal -->
+	<div id="dealtTrump" class="modal">
+		<!-- Modal content -->
+		<div class="modal-content">
+			<p id="modalDealtText">Should the dealer pick it up?</p>
+			<input type="checkbox" id="modalDealtGoAlone">Go Alone</input>
+				<button id="modalDealtTrump">palceHolder</button><button id="modalDealtPass">Pass</button>
+		</div>
+	</div>
 
-  <!-- Modal content -->
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <p id="modalText">Some text in the Modal..</p>
-		<button id="modalHearts">Hearts</button><button id="modalSpades">Spades</button><button id="modalDiamonds">Diamonds</button><button id="modalClubs">Clubs</button>
-  </div>
+	<!-- The Modal -->
+	<div id="orderTrump" class="modal">
+		<!-- Modal content -->
+		<div class="modal-content">
+			<p id="modalOrderText">Order up trump</p>
+			<input type="checkbox" id="modalOrderTrump">Go Alone</input><br>
+				<button id="modalOrderHearts">Hearts</button><button id="modalOrderSpades">Spades</button><button id="modalOrderDiamonds">Diamonds</button><button id="modalOrderClubs">Clubs</button><button id="modalOrderPass">Pass</button>
+		</div>
+	</div>
 
-</div>
 	<footer>
-		cards.js was created by <a href="http://einaregilsson.com">Einar Egilsson</a> and is licensed
+		The cards library(cards.js) was created by <a href="http://einaregilsson.com">Einar Egilsson</a> and is licensed
 		under the MIT license. The card images were created by <a href="http://nicubunu.ro">Nicu Buculei</a> and are
 		in the public domain.
 	</footer>

@@ -438,11 +438,14 @@ socket.on('cards', function(data) {
 
 //  ***************     Recieve asking dealt trump     ***************
 socket.on('orderDealt', function(data) {
-  let message = "Do you want to order up - " + suitConvertor.get(data.dealtTrump);
-  let response = confirm(messsage);
+  BTN_MD_TRUMP.innerHTML = suitConvertor.get(dealtTrumpSuit);
+  MODALDEALT_TXT.innerHTML = "Should the dealer pick it up?"
+  MODALDEALT.style.display = "block";
+
   socket.emit('dealtTrumpResponse', {
-    playerNum: p,
-    dealtTrumpResponse: response,
+    playerNum: myPlayerNumber,
+    dealtTrumpResponse: playerResponse,
+    goAlone: goAlone,
     room: code
   });
 });
@@ -450,8 +453,22 @@ socket.on('orderDealt', function(data) {
 //  ***************     Recieve asking dealt trump     ***************
 socket.on('dealtTrumpReponse', function(data) {
   found = data.response;
-  numberOfPlayersAskedAboutTrump++;
-  player = incrementPlayer(player);
+  if (found) {
+    //  we have our suit, and we know if player is going alone
+    trumpSuit = dealtTrumpSuit;
+    goAlone = data.playerGoingAlone;
+    //  need to tell everyone
+  } else {
+    numOfAsks++;
+    if (numOfAsks > MAX_PLAYERS) {
+      // ask around order up Trump
+    }
+    //  ask next player if dealt suit is good
+    if (myPlayerNumber == dealer) { // if I am the dealer, ask next playerResponse
+      player = incrementPlayer(player);
+      askPlayerToOrderUpDealtTrump(player, dealtTrumpSuit);
+    }
+  }
 });
 
 //  ***************     Recieved Load     ***************
