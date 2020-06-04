@@ -80,25 +80,9 @@ var playerInfo = [{
     background: "#fcfce8"
   },
 ];
-//Tell the library which element to use for the table
-cards.init({
-  table: '#card-table',
-  type: EUCHRE
-});
 
-//DLG_TRUMP.focus();
-//DLG_TRUMP.hide();
+initDeck();
 
-//Create a new deck of cards
-deck = new cards.Deck();
-//By default it's in the middle of the container, put it slightly to the side
-deck.x -= 50;
-//cards.all contains all cards, put them all in the deck
-deck.addCards(cards.all);
-//No animation here, just get the deck onto the table.
-deck.render({
-  immediate: true
-});
 
 //Lets add a discard pile
 discardPile = new cards.Deck({
@@ -130,6 +114,7 @@ function deal() {
   if (gameOn == false)
     determineWhoGoesFirst();
   numberOfPlayersAskedAboutTrump = 0;
+  trumpSuit=undefined;
   deck.deal(5, [player0Hand, player1Hand, player2Hand, player3Hand], 40, function() {
     //This is a callback function, called when the dealing
     //is done.
@@ -177,25 +162,26 @@ function deal() {
   });
   gameOn = true;
 }
+function initDeck(){
+  //Tell the library which element to use for the table
+  cards.init({table: '#card-table',type: EUCHRE});
+
+  //Create a new deck of cards
+  deck = new cards.Deck();
+  //By default it's in the middle of the container, put it slightly to the side
+  deck.x -= 50;
+  //cards.all contains all cards, put them all in the deck
+  deck.addCards(cards.all);
+  //No animation here, just get the deck onto the table.
+  deck.render({immediate: true});
+}
 
 function redeal(){
   console.log("re-dealing!!");
-  //for (let h=0; h<MAX_PLAYERS; h++)
-  for(let c=0; c<5; c++){
-    player0Hand[c].hideCard();
-  }
-  for(let c=0; c<5; c++){
-    player1Hand[c].hideCard();
-  }
-  for(let c=0; c<5; c++){
-    player2Hand[c].hideCard();
-  }
-  for(let c=0; c<5; c++){
-    player3Hand[c].hideCard();
-  }
-  cards.shuffle(deck);
+  //send redeal to all other players
+  sendRedeal();
+  initDeck();
   deal();
-
   //send redeal to all other players
 
 }
@@ -237,6 +223,7 @@ function determineWhoGoesFirst() {
   dealer = Math.floor(Math.random() * MAX_PLAYERS);
   DEALER.value = playerInfo[dealer].name;
   console.log("Dealer is set to: " + playerInfo[dealer].name);
+  turn=incrementPlayer(dealer);
 }
 
 
@@ -271,7 +258,9 @@ function setHand(myN_Cards) {
     discardPile.addCard(theTopCard);
     discardPile.render();
     console.log("dealer is: " + DEALER.value);
+    dealtTrumpSuit=newSuit;
   });
+  turn=incrementPlayer(dealer);
 
 }
 /*
@@ -288,8 +277,6 @@ deck.click(function(card){
 //Finally, when you click a card in your hand, if it's
 //the same suit or rank as the top card of the discard pile
 //then it's added to it
-function playCard() {}
-
 player0Hand.click(function(card) {
   if (card.suit != playedSuit) {
     //if the player has no other cards of the playes suit, they can play any card
@@ -381,9 +368,8 @@ window.onclick = function(event) {
     console.log("\tOrder - go Alone");
     goAlone = BTN_MO_GOALONE.checked;
   }
-  if (event.target == player0Hand) {
-    console.log("\tPlay Card");
-    playCard();
+  if(trumpSuit!=undefined){
+    console.log("the Trump suit is: " + suitConvertor.get(trumpSuit));
+    sendTrumpSuit();
   }
-  console.log("the Trump suit is: " + suitConvertor.get(trumpSuit));
 }

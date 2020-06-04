@@ -321,6 +321,7 @@ function sendplayerThierCards(myplayerNum, myN_Cards, theDealer) {
   });
 }
 
+//  ***************     ask player to orderup trump     ***************
 function askPlayerToOrderUpTrump(p, t, k) {
   console.log("Asking player: " + p + " if they want: " + t + "as the trump suit");
   socket.emit('dealtTrump', {
@@ -329,8 +330,26 @@ function askPlayerToOrderUpTrump(p, t, k) {
     type: k,
     room: code
   });
-
 }
+
+//  ***************     Send Players their cards     ***************
+function sendRedeal() {
+  console.log("sending player Re-deal");
+  socket.emit('redeal', {
+    room: code
+  });
+}
+
+//  ***************     Send trump suit     ***************
+function sendTrumpSuit() {
+  console.log("sending trump suit");
+  socket.emit('trumpsuit', {
+    newTrump:trumpSuit,
+    isGoingAlone:goAlone,
+    room: code
+  });
+}
+
 
 //***************************************************************
 //  responses from server
@@ -470,7 +489,18 @@ MODALORDER.style.display = "block";
 //  ***************     Recieve asking dealt trump     ***************
 socket.on('dealtTrumpReponse', function(data) {
   found = data.response;
+});
 
+//  ***************     Recieve asking dealt trump     ***************
+socket.on('receiveRedeal', function(data) {
+  initDeck();
+});
+
+//  ***************     Recieve trump suit     ***************
+socket.on('recieveTrumpSuit', function(data) {
+  console.log("setting trump suit to: "+data.trumpSuit);
+  trumpSuit=data.trumpSuit;
+  goAlone=data.goAlone;
 });
 
 //  ***************     Recieved Load     ***************

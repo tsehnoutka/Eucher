@@ -314,7 +314,27 @@ io.on('connection', function (socket) {
 
    });
 
+   // ******************   re deal  ***********************
+   socket.on('redeal', function (data) {
+    console.log("redealing: " + socket.id);
 
+    if (!checkCodeExist(data.room))
+      return;
+
+    socket.broadcast.to(data.room).emit('receiveRedeal');
+
+   });
+
+// ******************   trump suit  ***********************
+socket.on('trumpsuit', function (data) {
+  console.log("trump suit: " + socket.id);
+
+  if (!checkCodeExist(data.room))
+    return;
+
+  socket.broadcast.to(data.room).emit('recieveTrumpSuit',{trumpSuit:data.trumpSuit,goAlone:data.isGoingAlone});
+
+ });
 
 
 
